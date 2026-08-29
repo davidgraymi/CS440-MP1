@@ -1,0 +1,83 @@
+# Reference paths for data/word_ladder/ladder_problems.txt.
+# Format:
+# add_cost_to_vowels use_heuristic start goal expected_cost path
+False False fly low 4 fly bly boy bow low
+False False dog cat 3 dog cog cot cat
+False False ape man 4 ape aie mie mae man
+False False big boy 2 big bog boy
+False False head tail 4 head heid heil teil tail
+False False wait past 2 wait wast past
+False False slow down 5 slow show shon soon doon down
+False False main land 3 main lain laid land
+False False lake town 5 lake sake sawe sawn sown town
+False False fool sage 5 fool foil soil sail saie sage
+False False bulky order 9 bulky bully gully gulls gules gutes guter outer orter order
+False False funny child 8 funny sunny sunne runne ruine rhine chine chile child
+False False small thing 6 small shall shale shane thane thine thing
+False False broken clocks 15 broken broker brower grower grover graver graves craves cranes cranks franks flanks blanks blacks blocks clocks
+False False hidden silver 7 hidden bidden bilden bilder milder miller siller silver
+False False what when 2 what whet when
+False False driving student NA NO_PATH
+False False star eyed 5 star ster sten eten eyen eyed
+False False incredibly stupendous NA NO_PATH
+False False say bye 4 say bay bey bee bye
+False True fly low 4 fly foy boy bow low
+False True dog cat 3 dog cog cot cat
+False True ape man 4 ape ane ann aan man
+False True big boy 2 big bog boy
+False True head tail 4 head heid heil teil tail
+False True wait past 2 wait wast past
+False True slow down 5 slow show shon soon doon down
+False True main land 3 main lain laid land
+False True lake town 5 lake lawe lawn dawn down town
+False True fool sage 5 fool foil soil sail saie sage
+False True bulky order 9 bulky bully gully gulls gules gutes guter outer orter order
+False True funny child 8 funny sunny sunne runne ruine rhine chine chile child
+False True small thing 6 small shall shale shane thane thine thing
+False True broken clocks 15 broken broker brower grower grover groves graves graces glaces places planes planks blanks blacks blocks clocks
+False True hidden silver 7 hidden bidden bilden bilder milder miller siller silver
+False True what when 2 what whet when
+False True driving student NA NO_PATH
+False True star eyed 5 star ster sten eten eyen eyed
+False True incredibly stupendous NA NO_PATH
+False True say bye 4 say bay bey bee bye
+True False fly low 13 fly bly boy bow low
+True False dog cat 12 dog cog cot cat
+True False ape man 13 ape ame mme mae man
+True False big boy 11 big bog boy
+True False head tail 22 head heal teal taal tail
+True False wait past 2 wait wast past
+True False slow down 14 slow show shon soon doon down
+True False main land 3 main lain laid land
+True False lake town 14 lake sake sawe sawn sown town
+True False fool sage 23 fool foll soll sall sale sage
+True False bulky order 27 bulky bully gully gulls gules gutes guter outer orter order
+True False funny child 26 funny sunny sunne runne ruine rhine chine chile child
+True False small thing 16 small stall stalk stank shank thank think thing
+True False broken clocks 33 broken broker brower grower grover groves graves craves cranes cranks franks flanks blanks blacks blocks clocks
+True False hidden silver 7 hidden bidden bilden bilder milder miller siller silver
+True False what when 11 what whan when
+True False driving student NA NO_PATH
+True False star eyed 23 star stan sten eten eyen eyed
+True False incredibly stupendous NA NO_PATH
+True False say bye 13 say bay bly ble bye
+True True fly low 13 fly bly boy bow low
+True True dog cat 12 dog cog cot cat
+True True ape man 13 ape ane ann aan man
+True True big boy 11 big bog boy
+True True head tail 22 head heal teal taal tail
+True True wait past 2 wait wast past
+True True slow down 14 slow show shon soon doon down
+True True main land 3 main lain laid land
+True True lake town 14 lake lawe lawn dawn down town
+True True fool sage 23 fool foll soll sall sale sage
+True True bulky order 27 bulky bully gully gulls gules gutes guter outer orter order
+True True funny child 26 funny sunny sunne runne ruine rhine chine chile child
+True True small thing 16 small stall stalk stank shank thank think thing
+True True broken clocks 33 broken broker brower grower grover groves graves graces glaces places planes planks blanks blacks blocks clocks
+True True hidden silver 7 hidden bidden bilden bilder milder miller siller silver
+True True what when 11 what whan when
+True True driving student NA NO_PATH
+True True star eyed 23 star stan eten eyen eyed
+True True incredibly stupendous NA NO_PATH
+True True say bye 13 say bay bly ble bye
