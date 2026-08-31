@@ -27,11 +27,25 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
     # You can pop from the queue using "heapq.heappop(frontier)"
     # You can push onto the queue using "heapq.heappush(frontier, state)"
     # NOTE: states are ordered because the __lt__ method of AbstractState is implemented
-    frontier = []
+    frontier: list[AbstractState] = []
     heapq.heappush(frontier, starting_state)
     
     # TODO(III): implement the rest of the best first search algorithm
     # Your code here ---------------
+    while len(frontier) > 0:
+        state = heapq.heappop(frontier)
+
+        for neighbor in state.get_neighbors():
+            visited_neighbor = visited_states.get(neighbor, None)
+            if visited_neighbor != None and visited_neighbor[1] <= neighbor.dist_from_start:
+                continue
+
+            visited_states[neighbor] = (state, neighbor.dist_from_start)
+
+            if state.is_goal():
+                return backtrack(visited_states, state)
+
+            heapq.heappush(frontier, neighbor)
 
     # ------------------------------
     
@@ -54,6 +68,18 @@ def backtrack(visited_states: dict, goal_state: AbstractState) -> list[AbstractS
     path = []
     # TODO(III): implement the backtrack method using the parent pointers in visited_states
     # Your code here ---------------
+    state = goal_state
+    while True:
+        path.insert(0, state)
+        parent_state, distance_of_state_from_start = visited_states.get(state, (None, -1))
+
+        if parent_state == None and distance_of_state_from_start == -1:
+            raise ValueError("State has not been visited.")
+
+        elif parent_state == None and distance_of_state_from_start == 0:
+            break
+        
+        state = parent_state
 
     # ------------------------------
     return path
