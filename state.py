@@ -49,7 +49,22 @@ class AbstractState(ABC):
     def __lt__(self, other : AbstractState) -> bool:
         # TODO(III): implement this method
         # Your code here ---------------
-        raise NotImplementedError # remove this once you've implemented the function
+        f_self = self.dist_from_start + self.h
+        f_other = other.dist_from_start + other.h
+
+        if f_self < f_other:
+            return True
+        elif f_self == f_other:
+            # Prefer smaller h value
+            if self.h < other.h:
+                return True
+            elif self.h > other.h:
+                return False
+            # Fallback to created first
+            return self.tiebreak_idx < other.tiebreak_idx
+        else:
+            return False
+            
         # ------------------------------
 
     # The "hash" method allows us to keep track of which states have been visited before in a dictionary

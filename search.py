@@ -21,7 +21,7 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
     #   - keep track of the distance of each state from start node
     #       - if we find a shorter path to the same state we can update with the new state 
     # NOTE: we can hash states because the __hash__/__eq__ method of AbstractState is implemented
-    visited_states = {starting_state: (None, 0)}
+    visited_states: dict[AbstractState, tuple[AbstractState | None, int]] = {starting_state: (None, 0)}
 
     # The frontier is a priority queue
     # You can pop from the queue using "heapq.heappop(frontier)"
@@ -35,16 +35,17 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
     while len(frontier) > 0:
         state = heapq.heappop(frontier)
 
+        if state.is_goal():
+            return backtrack(visited_states, state)
+
         for neighbor in state.get_neighbors():
-            visited_neighbor = visited_states.get(neighbor, None)
-            if visited_neighbor != None and visited_neighbor[1] <= neighbor.dist_from_start:
-                continue
+            if neighbor in visited_states:
+                neighbor_parent_state, neighbor_distance_of_state_from_start = visited_states[neighbor]
+
+                if neighbor_distance_of_state_from_start <= neighbor.dist_from_start:
+                    continue
 
             visited_states[neighbor] = (state, neighbor.dist_from_start)
-
-            if state.is_goal():
-                return backtrack(visited_states, state)
-
             heapq.heappush(frontier, neighbor)
 
     # ------------------------------
@@ -73,12 +74,12 @@ def backtrack(visited_states: dict, goal_state: AbstractState) -> list[AbstractS
         path.insert(0, state)
         parent_state, distance_of_state_from_start = visited_states.get(state, (None, -1))
 
-        if parent_state == None and distance_of_state_from_start == -1:
+        if distance_of_state_from_start == -1:
             raise ValueError("State has not been visited.")
 
-        elif parent_state == None and distance_of_state_from_start == 0:
+        elif distance_of_state_from_start == 0:
             break
-        
+
         state = parent_state
 
     # ------------------------------
