@@ -7,9 +7,6 @@ from itertools import count
 import copy # you may want to use copy when creating neighbors for EightPuzzle...
 from utils import is_english_word, levenshteinDistance, compute_mst_cost
 
-# TODO(III): You should read through this abstract class
-#           your search implementation must work with this API,
-#           namely your search will need to call is_goal() and get_neighbors()
 class AbstractState(ABC):
     # This count increments every time a new AbstractState is created
     _tiebreak_count = count()
@@ -47,8 +44,6 @@ class AbstractState(ABC):
     # The "less than" method ensures that states are comparable.
     # self.dist_from_start is g, self.h is h, and self.tiebreak_idx is the tiebreaker.
     def __lt__(self, other : AbstractState) -> bool:
-        # TODO(III): implement this method
-        # Your code here ---------------
         f_self = self.dist_from_start + self.h
         f_other = other.dist_from_start + other.h
 
@@ -64,8 +59,6 @@ class AbstractState(ABC):
             return self.tiebreak_idx < other.tiebreak_idx
         else:
             return False
-            
-        # ------------------------------
 
     # The "hash" method allows us to keep track of which states have been visited before in a dictionary
     # You should hash states based on self.state (and sometimes self.goal, if it can change)
@@ -79,10 +72,6 @@ class AbstractState(ABC):
     
 # WordLadder ------------------------------------------------------------------------------------------------
 
-# TODO(III): we've provided you all of WordLadderState, read through our comments and code below 
-#           to get a feel for how you should implement future AbstractState classes.
-#           (we may also ask you about some details on the next quiz, such as what is Levenshtein distance?)
-#           NOTE that to run search with WordLadderState you will need to fill in AbstractState.__lt__(self, other) above
 class WordLadderState(AbstractState):
     def __init__(self, state, goal, dist_from_start, use_heuristic, cost_per_letter):
         '''
@@ -148,8 +137,6 @@ class WordLadderState(AbstractState):
 
 # EightPuzzle ------------------------------------------------------------------------------------------------
 
-# TODO(IV): implement this method (you also need it for the next state class)
-# Manhattan distance between two points represented as (row, col)
 def manhattan(a, b) -> float:
     return sum([abs(a[i] - b[i]) for i in range(len(a))])
 
@@ -167,7 +154,6 @@ class EightPuzzleState(AbstractState):
         self.zero_loc = zero_loc
         self.print_one = False
     
-    # TODO(IV): implement this method
     def get_neighbors(self) -> list[EightPuzzleState]:
         nbr_states = []
         # NOTE: There are *up to 4* possible neighbors and the order you add them matters for tiebreaking
@@ -262,8 +248,6 @@ class EightPuzzleState(AbstractState):
     def compute_heuristic(self) -> float:
         # print(repr(self))
         total = 0
-        # TODO(IV): implement the Manhattan heuristic, as described in the MP instructions
-        # Your code here ---------------
         def find_position(grid, target):
             for r, row in enumerate(grid):
                 for c, val in enumerate(row):
@@ -282,7 +266,6 @@ class EightPuzzleState(AbstractState):
                 man = manhattan(start, end)
                 total += man
         # print(f'total distance is {total}')
-        # ------------------------------
         return total
     
     # NOTE: we emphasize for you that you do NOT need to touch the __lt__ method, 
@@ -313,12 +296,35 @@ class SingleGoalGridState(AbstractState):
         # TODO(V): fill this in
         # The distance from the start to a neighbor is always 1 more than the distance to the current state
         # Your code here ---------------
-        
+        for neighbor_cell in neighboring_cells:
+            if self.maze.is_free(neighbor_cell[0], neighbor_cell[1]):
+                neighbor_state = SingleGoalGridState(
+                    neighbor_cell,
+                    self.goal,
+                    self.dist_from_start + 1,
+                    self.use_heuristic,
+                    self.maze
+                )
+
+                nbr_states.append(neighbor_state)
         # ------------------------------
         return nbr_states
 
     # TODO(V): fill in the is_goal, compute_heuristic, __hash__, and __eq__ methods
     # Your heuristic should be the manhattan distance between the state and the goal
+
+    # Checks if goal has been reached
+    def is_goal(self) -> bool:
+        # In python "==" performs deep tuple equality checking, so this works as desired
+        return self.state == self.goal
+
+    def __hash__(self) -> int:
+        return hash(self.state)
+    def __eq__(self, other) -> bool:
+        return self.state == other.state
+
+    def compute_heuristic(self) -> float:
+        return manhattan(self.state, self.goal)
     
     # str and repr just make output more readable when your print out states
     def __str__(self):

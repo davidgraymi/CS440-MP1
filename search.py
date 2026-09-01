@@ -30,8 +30,6 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
     frontier: list[AbstractState] = []
     heapq.heappush(frontier, starting_state)
     
-    # TODO(III): implement the rest of the best first search algorithm
-    # Your code here ---------------
     while len(frontier) > 0:
         state = heapq.heappop(frontier)
 
@@ -49,8 +47,6 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
 
             visited_states[neighbor] = (state, neighbor.dist_from_start)
             heapq.heappush(frontier, neighbor)
-
-    # ------------------------------
     
     # if you do not find the goal return an empty list
     return []
@@ -69,8 +65,6 @@ def backtrack(visited_states: dict, goal_state: AbstractState) -> list[AbstractS
         The last state should have state.is_goal() == True
     '''
     path = []
-    # TODO(III): implement the backtrack method using the parent pointers in visited_states
-    # Your code here ---------------
     state = goal_state
     while True:
         path.insert(0, state)
@@ -83,6 +77,4 @@ def backtrack(visited_states: dict, goal_state: AbstractState) -> list[AbstractS
             break
 
         state = parent_state
-
-    # ------------------------------
     return path
