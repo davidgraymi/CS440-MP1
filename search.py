@@ -36,11 +36,13 @@ def best_first_search(starting_state : AbstractState) -> list[AbstractState]:
         state = heapq.heappop(frontier)
 
         if state.is_goal():
+            # print(f"Found goal {repr(state)}")
+            # print(repr(visited_states))
             return backtrack(visited_states, state)
 
         for neighbor in state.get_neighbors():
             if neighbor in visited_states:
-                neighbor_parent_state, neighbor_distance_of_state_from_start = visited_states[neighbor]
+                _, neighbor_distance_of_state_from_start = visited_states[neighbor]
 
                 if neighbor_distance_of_state_from_start <= neighbor.dist_from_start:
                     continue
@@ -72,12 +74,12 @@ def backtrack(visited_states: dict, goal_state: AbstractState) -> list[AbstractS
     state = goal_state
     while True:
         path.insert(0, state)
-        parent_state, distance_of_state_from_start = visited_states.get(state, (None, -1))
 
-        if distance_of_state_from_start == -1:
+        if state not in visited_states:
             raise ValueError("State has not been visited.")
 
-        elif distance_of_state_from_start == 0:
+        parent_state, distance_of_state_from_start = visited_states[state]
+        if distance_of_state_from_start == 0:
             break
 
         state = parent_state

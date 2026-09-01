@@ -151,7 +151,7 @@ class WordLadderState(AbstractState):
 # TODO(IV): implement this method (you also need it for the next state class)
 # Manhattan distance between two points represented as (row, col)
 def manhattan(a, b) -> float:
-    return 0
+    return sum([abs(a[i] - b[i]) for i in range(len(a))])
 
 class EightPuzzleState(AbstractState):
     def __init__(self, state, goal, dist_from_start, use_heuristic, zero_loc):
@@ -165,6 +165,7 @@ class EightPuzzleState(AbstractState):
         # NOTE: AbstractState constructor does not take zero_loc
         super().__init__(state, goal, dist_from_start, use_heuristic)
         self.zero_loc = zero_loc
+        self.print_one = False
     
     # TODO(IV): implement this method
     def get_neighbors(self) -> list[EightPuzzleState]:
@@ -173,6 +174,76 @@ class EightPuzzleState(AbstractState):
         #   Please add them in the following order: [below, left, above, right], where for example "below" 
         #   corresponds to moving the empty tile down (moving the tile below the empty tile up)
         # Your code here ---------------
+
+        if self.print_one:
+            print(repr(self), "self")
+        
+        if self.zero_loc[0] < 2:
+            new_zero_loc = (self.zero_loc[0] + 1, self.zero_loc[1])
+            new_state = copy.deepcopy(self.state)
+            new_state[self.zero_loc[0]][self.zero_loc[1]] = new_state[new_zero_loc[0]][new_zero_loc[1]]
+            new_state[new_zero_loc[0]][new_zero_loc[1]] = 0
+            below: EightPuzzleState = EightPuzzleState(
+                new_state,
+                self.goal,
+                self.dist_from_start + 1, 
+                self.use_heuristic,
+                new_zero_loc
+            )
+            if self.print_one:
+                print(repr(below), "below")
+            nbr_states.append(below)
+
+        if self.zero_loc[1] > 0:
+            new_zero_loc = (self.zero_loc[0], self.zero_loc[1] - 1)
+            new_state = copy.deepcopy(self.state)
+            new_state[self.zero_loc[0]][self.zero_loc[1]] = new_state[new_zero_loc[0]][new_zero_loc[1]]
+            new_state[new_zero_loc[0]][new_zero_loc[1]] = 0
+            left: EightPuzzleState = EightPuzzleState(
+                new_state,
+                self.goal,
+                self.dist_from_start + 1, 
+                self.use_heuristic,
+                new_zero_loc
+            )
+            if self.print_one:
+                print(repr(left), "left")
+            nbr_states.append(left)
+
+        if self.zero_loc[0] > 0:
+            new_zero_loc = (self.zero_loc[0] - 1, self.zero_loc[1])
+            new_state = copy.deepcopy(self.state)
+            new_state[self.zero_loc[0]][self.zero_loc[1]] = new_state[new_zero_loc[0]][new_zero_loc[1]]
+            new_state[new_zero_loc[0]][new_zero_loc[1]] = 0
+            above: EightPuzzleState = EightPuzzleState(
+                new_state,
+                self.goal,
+                self.dist_from_start + 1, 
+                self.use_heuristic,
+                new_zero_loc
+            )
+            if self.print_one:
+                print(repr(above), "above")
+            nbr_states.append(above)
+
+        if self.zero_loc[1] < 2:
+            new_zero_loc = (self.zero_loc[0], self.zero_loc[1] + 1)
+            new_state = copy.deepcopy(self.state)
+            new_state[self.zero_loc[0]][self.zero_loc[1]] = new_state[new_zero_loc[0]][new_zero_loc[1]]
+            new_state[new_zero_loc[0]][new_zero_loc[1]] = 0
+            right: EightPuzzleState = EightPuzzleState(
+                new_state,
+                self.goal,
+                self.dist_from_start + 1, 
+                self.use_heuristic,
+                new_zero_loc
+            )
+            if self.print_one:
+                print(repr(right), "right")
+            nbr_states.append(right)
+
+        if self.print_one:
+            self.print_one = False
         
         # ------------------------------
         return nbr_states
@@ -189,10 +260,28 @@ class EightPuzzleState(AbstractState):
         return self.state == other.state
     
     def compute_heuristic(self) -> float:
+        # print(repr(self))
         total = 0
         # TODO(IV): implement the Manhattan heuristic, as described in the MP instructions
         # Your code here ---------------
-        
+        def find_position(grid, target):
+            for r, row in enumerate(grid):
+                for c, val in enumerate(row):
+                    if val == target:
+                        return (r, c)
+            return None
+
+        for row_index, row in enumerate(self.state):
+            for col_index in range(len(row)):
+                target = self.state[row_index][col_index]
+                if target == 0:
+                    continue
+
+                start = (row_index, col_index)
+                end = find_position(self.goal, target)
+                man = manhattan(start, end)
+                total += man
+        # print(f'total distance is {total}')
         # ------------------------------
         return total
     
