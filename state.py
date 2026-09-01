@@ -293,9 +293,7 @@ class SingleGoalGridState(AbstractState):
         # Some of these cells may be walls. Use self.maze.is_free(...) to keep only valid locations.
         # feel free to look into maze.py for more details... we also recommend printing neighboring_cells to see what it looks like
         neighboring_cells = self.maze.neighboring_cells(*self.state)
-        # TODO(V): fill this in
         # The distance from the start to a neighbor is always 1 more than the distance to the current state
-        # Your code here ---------------
         for neighbor_cell in neighboring_cells:
             if self.maze.is_free(neighbor_cell[0], neighbor_cell[1]):
                 neighbor_state = SingleGoalGridState(
@@ -309,9 +307,6 @@ class SingleGoalGridState(AbstractState):
                 nbr_states.append(neighbor_state)
         # ------------------------------
         return nbr_states
-
-    # TODO(V): fill in the is_goal, compute_heuristic, __hash__, and __eq__ methods
-    # Your heuristic should be the manhattan distance between the state and the goal
 
     # Checks if goal has been reached
     def is_goal(self) -> bool:
@@ -351,11 +346,44 @@ class MultiGoalGridState(AbstractState):
         neighboring_cells = self.maze.neighboring_cells(*self.state)
         # TODO(VI): fill this in
         # -------------------------------
-
+        for neighbor in neighboring_cells:
+            if self.maze.is_free(neighbor[0], neighbor[1]):
+                next_state = MultiGoalGridState(
+                    neighbor,
+                    tuple(t for t in self.goal if t != neighbor),
+                    self.dist_from_start + 1,
+                    self.use_heuristic,
+                    self.maze,
+                    self.mst_cache
+                )
+                nbr_states.append(next_state)
         # -------------------------------
         return nbr_states
 
     # TODO(VI): fill in the is_goal, compute_heuristic, __hash__, and __eq__ methods
+    # Checks if goal has been reached
+    def is_goal(self) -> bool:
+        return len(self.goal) == 0
+
+    def __hash__(self) -> int:
+        return hash(self.goal + (self.state,))
+    def __eq__(self, other) -> bool:
+        return (self.goal + (self.state,)) == (other.goal + (other.state,))
+
+    def compute_heuristic(self) -> float:
+        if len(self.goal) <= 0:
+            return 0
+        
+        mst = compute_mst_cost(self.goal, manhattan)
+        self.mst_cache[self] = mst
+
+        closest_goal_dist = manhattan(self.state, self.goal[0])
+        for goal in self.goal[1:]:
+            dist = manhattan(self.state, goal)
+            if dist < closest_goal_dist:
+                closest_goal_dist = dist
+
+        return closest_goal_dist + mst
     
     # str and repr just make output more readable when your print out states
     def __str__(self):
