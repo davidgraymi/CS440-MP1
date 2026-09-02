@@ -159,7 +159,6 @@ class EightPuzzleState(AbstractState):
         # NOTE: There are *up to 4* possible neighbors and the order you add them matters for tiebreaking
         #   Please add them in the following order: [below, left, above, right], where for example "below" 
         #   corresponds to moving the empty tile down (moving the tile below the empty tile up)
-        # Your code here ---------------
 
         if self.print_one:
             print(repr(self), "self")
@@ -231,7 +230,6 @@ class EightPuzzleState(AbstractState):
         if self.print_one:
             self.print_one = False
         
-        # ------------------------------
         return nbr_states
 
     # Checks if goal has been reached
@@ -344,8 +342,6 @@ class MultiGoalGridState(AbstractState):
     def get_neighbors(self) -> list[MultiGoalGridState]:
         nbr_states = []
         neighboring_cells = self.maze.neighboring_cells(*self.state)
-        # TODO(VI): fill this in
-        # -------------------------------
         for neighbor in neighboring_cells:
             if self.maze.is_free(neighbor[0], neighbor[1]):
                 next_state = MultiGoalGridState(
@@ -357,10 +353,8 @@ class MultiGoalGridState(AbstractState):
                     self.mst_cache
                 )
                 nbr_states.append(next_state)
-        # -------------------------------
         return nbr_states
 
-    # TODO(VI): fill in the is_goal, compute_heuristic, __hash__, and __eq__ methods
     # Checks if goal has been reached
     def is_goal(self) -> bool:
         return len(self.goal) == 0
