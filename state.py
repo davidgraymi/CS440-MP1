@@ -373,9 +373,12 @@ class MultiGoalGridState(AbstractState):
     def compute_heuristic(self) -> float:
         if len(self.goal) <= 0:
             return 0
-        
-        mst = compute_mst_cost(self.goal, manhattan)
-        self.mst_cache[self] = mst
+
+        if self.goal in self.mst_cache:
+            mst = self.mst_cache[self.goal]
+        else:
+            mst = compute_mst_cost(self.goal, manhattan)
+            self.mst_cache[self.goal] = mst
 
         closest_goal_dist = manhattan(self.state, self.goal[0])
         for goal in self.goal[1:]:
